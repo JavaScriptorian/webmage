@@ -43,6 +43,10 @@ class DynamicSpell:
     def selectAll(self, css_selector):
         return self.driver.find_elements_by_css_selector(css_selector)
 
+    # Changes the URL of the original soup.
+    def change_url(self, url):
+        self.url = url
+        self.driver.get(url)
 
     # Click on a element by its css selector
     def click(self, css_selector):

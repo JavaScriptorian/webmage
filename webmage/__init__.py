@@ -5,8 +5,8 @@ import time
 from bs4 import BeautifulSoup as BS 
 
 
-from static import StaticSpell
-from dynamic import DynamicSpell
+from .static import StaticSpell
+from .dynamic import DynamicSpell
 
 class WebSpell:
     # Initializes a StaticSpell (requests) or DynamicSpell (selenium)
@@ -29,18 +29,3 @@ class WebSpell:
                 ghost = self.keys['ghost']
             return DynamicSpell(url=self.url, driver_path=driver_path, ghost=ghost)
 
-
-
-# def test(rune):
-#     tweets = rune.selectAll('article[data-testid="tweet"]')
-#     for tweet in tweets:
-#         print(f'{tweet.get_attribute("textContent")}\n\n\n')
-#         ibrk = 0
-
-
-# spell = WebSpell(url='https://twitter.com/katyperry', method='dynamic').cast()
-
-
-
-# spell.scroll(wait_interval=5, scroll_count=10, callback=test)
-# ibrk = 0
