@@ -29,3 +29,10 @@ class WebSpell:
                 ghost = self.keys['ghost']
             return DynamicSpell(url=self.url, driver_path=driver_path, ghost=ghost)
 
+
+
+# spell = WebSpell('https://wordcruncher.com', method='dynamic').cast()
+# spell.change_url('https://wordcruncher.com/docs')
+
+# for tmp in spell.selectAll('p'):
+#     print(tmp)

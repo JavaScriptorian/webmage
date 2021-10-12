@@ -4,6 +4,9 @@ from selenium import webdriver
 from time import sleep
 from webdriver_manager.chrome import ChromeDriverManager
 
+# Runes
+from .dynamic_rune import DynamicRune
+
 class DynamicSpell:
     def __init__(self, url, driver_path=None, ghost=False):
         self.url = url
@@ -36,12 +39,12 @@ class DynamicSpell:
 
     # For selecting first item based on CSS selector.
     def select(self, css_selector):
-        return self.driver.find_element_by_css_selector(css_selector)
+        return DynamicRune(self.driver.find_element_by_css_selector(css_selector), self.driver)
 
 
     # For selecting first item based on CSS selector.
     def selectAll(self, css_selector):
-        return self.driver.find_elements_by_css_selector(css_selector)
+        return [DynamicRune(i, self.driver)for i in self.driver.find_elements_by_css_selector(css_selector)]
 
     # Changes the URL of the original soup.
     def change_url(self, url):
@@ -59,12 +62,17 @@ class DynamicSpell:
             el.click()
             self.wait(wait_interval)
 
-    def scroll(self, wait_interval, scroll_count, callback=None, verbose=True):
+    def scroll(self, wait_interval, scroll_count, scroll_css_selector="document.scrollingElement", callback=None, verbose=True):
         counter = 1
-        last_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
+
+        # Make the CSS Selector into a querySelector
+        if scroll_css_selector != 'document.scrollingElement':
+            scroll_css_selector = f'document.querySelector("{scroll_css_selector}")'
+
+        last_height = self.driver.execute_script(f"return {scroll_css_selector}.scrollHeight")
 
         while counter <= scroll_count:
-            self.driver.execute_script(f"document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight;")
+            self.driver.execute_script(f"{scroll_css_selector}.scrollTop = {scroll_css_selector}.scrollHeight;")
             # Wait to load page
             self.wait(wait_interval)
             if verbose:
@@ -76,8 +84,7 @@ class DynamicSpell:
                 callback(self)
             
             # Calculate new scroll height and compare with last scroll height
-            new_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
-            print(new_height, last_height)
+            new_height = self.driver.execute_script(f"return {scroll_css_selector}.scrollHeight")
 
             if new_height == last_height:
                 break
@@ -86,12 +93,17 @@ class DynamicSpell:
         print('')
 
 
-    def infinite_scroll(self, wait_interval, callback=None, verbose=True):
+    def infinite_scroll(self, wait_interval, scroll_css_selector="document.scrollingElement", callback=None, verbose=True):
         counter = 1
-        last_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
+
+        # Make the CSS Selector into a querySelector
+        if scroll_css_selector != 'document.scrollingElement':
+            scroll_css_selector = f'document.querySelector("{scroll_css_selector}")'
+
+        last_height = self.driver.execute_script(f"return {scroll_css_selector}.scrollHeight")
 
         while True:
-            self.driver.execute_script(f"document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight;")
+            self.driver.execute_script(f"{scroll_css_selector}.scrollTop = {scroll_css_selector}.scrollHeight;")
             # Wait to load page
             self.wait(wait_interval)
             if verbose:
@@ -103,14 +115,13 @@ class DynamicSpell:
                 callback(self.driver)
             
             # Calculate new scroll height and compare with last scroll height
-            new_height = self.driver.execute_script("return document.scrollingElement.scrollHeight")
+            new_height = self.driver.execute_script(f"return {scroll_css_selector}.scrollHeight")
 
             if new_height == last_height:
                 break
             last_height = new_height
         # Go to next line after scroll completion.
         print('')
-
 
     # Wait a certain amount of seconds to continue code.
     def wait(self, time_interval):
