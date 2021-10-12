@@ -31,16 +31,16 @@ class WebSpell:
 
 
 
-def test(rune):
-    tweets = rune.selectAll('article[data-testid="tweet"]')
-    for tweet in tweets:
-        print(f'{tweet.get_attribute("textContent")}\n\n\n')
-        ibrk = 0
+# def test(rune):
+#     tweets = rune.selectAll('article[data-testid="tweet"]')
+#     for tweet in tweets:
+#         print(f'{tweet.get_attribute("textContent")}\n\n\n')
+#         ibrk = 0
 
 
-spell = WebSpell(url='https://twitter.com/katyperry', method='dynamic').cast()
+# spell = WebSpell(url='https://twitter.com/katyperry', method='dynamic').cast()
 
 
 
-spell.scroll(wait_interval=5, scroll_count=10, callback=test)
-ibrk = 0
+# spell.scroll(wait_interval=5, scroll_count=10, callback=test)
+# ibrk = 0
