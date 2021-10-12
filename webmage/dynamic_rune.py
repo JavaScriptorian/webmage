@@ -18,6 +18,11 @@ class DynamicRune:
     def __str__(self):
         return f'Dynamic Rune: {self.outerHTML}'
 
+    def __getitem__(self, item_request):
+        if item_request in self.attributes:
+            return self.attributes[item_request]
+        return None
+
     def select(self, css_selector):
         return DynamicRune(self.selenium_rune.find_element_by_css_selector(css_selector), self.driver)
 
