@@ -1,0 +1,73 @@
+# Description
+A wrapper around requests, BeautifulSoup, and Selenium (Chrome) to facilitate web scraping.
+
+# Installation
+```pip install webmage```
+
+# Usage
+webmage contains a class called WebSpell. It takes 1 required argument: url. It takes 2 optional arguments: driverPath and encoding. If driverPath is left as None, it will use ChromeDriverManager to get the latest chromedriver based on your installation of Chrome.
+```from webmage import WebSpell
+spell = WebSpell(url='https://javascriptorian.com', driverPath=None, encoding='utf-8')
+```
+
+## spell.get() - Get a static webpage using requests
+You can use the .get() function to tell it to get a webpage using requests. This will automatically add the soup object of the webpage to the spell's object.
+
+```
+spell.get()
+print(spell.soup)
+```
+
+## spell.drive() - Get a dynamic webpage using selenium
+You can use the .drive() function to tell WebSpell to get a webpage using selenium. This will automatically open a Chrome browser and add the soup object of the webpage to the spell's object, but soup will change whenever there is any interaction on the webpage. It has two optional arguments: nextURL and ghost.
+nextURL will allow you to change to a different URL after initialized a WebSpell. ghost will make it so that a browser is considered headless, and it does not open an explicit Chrome window.
+
+```
+spell = WebSpell('https://javascriptorian.com')
+spell.drive()
+>>> *Opens a Chrome browser to https://javascriptorian.com* 
+spell.drive('https://google.com')
+>>> *Changes the same window to https://google.com*
+```
+
+## spell.close() - Close the Chrome browser
+If you've usen the .drive() function to open a Chrome browser, then you can close it by using the .close() function.
+```
+spell.close()
+```
+
+## spell.select() - Select the first element on the webpage with a CSS selector.
+Use the .select() function to select the first applicable element with a CSS selector. If you've used .get(), then this will return a BeautifulSoup element object. If you've used .drive(), then this will return a Selenium element object. (TO BE CHANGED IN THE FUTURE TO INTEGRATE BETTER WITH WEBMAGE)
+```
+# Get the first <p> tag on the page.
+p_tag = spell.select('p')
+```
+
+## spell.selectAll() - Select all elements on the webpage with a CSS selector.
+Use the __.selectAll()__ function to select all applicable elements with a CSS selector. If you've used .get(), then this will return a BeautifulSoup elements object. If you've used .drive(), then this will return a Selenium elements object. (TO BE CHANGED IN THE FUTURE TO INTEGRATE BETTER WITH WEBMAGE)
+
+## spell.click() - Click on an element on the webpage.
+Use the __.click()__ function to click on an element on the page. Only available if you've used .drive(). 
+
+```
+spell.click('button.primary')
+```
+
+## spell.wait() - Pause the code
+Use the __.wait()__ function to pause between actions during web scraping. Useful when you need to wait a few seconds between each HTTP request. Same as time.sleep()
+```
+# Pause the scraper for 5 seconds.
+spell.wait(5)
+```
+
+## spell.scroll() - Scroll the page
+Use the __.scroll()__ function to scroll down the page. Takes 2 mandatory arguments: __time_interval__ and __scroll_count__.
+time_inteval is an integer to tell it how many seconds to wait between each scroll. This is important when it takes a few seconds to load new content on a dynamic page.
+scroll_count is an integer (or the string 'infinite') to tell the spell how many times it should scroll. Infinite scroll is the webmage's special ability. (NEEDS TO ADD AN EXTRA ARGUMENT IN CASE THE WEBSITE HAS A CUSTOM SCROLL ELEMENT.)
+
+```
+# Infinite Scroll - scroll until the page no longer loads and wait 5 seconds between each scroll.
+spell.scroll(time_interval=5, scroll_count='infinite')
+# Limited Scroll - scroll 30 times and wait 10 seconds between each scroll.
+spell.scroll(time_interval=10, scroll_count=30)
+```
