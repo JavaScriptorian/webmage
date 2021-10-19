@@ -9,7 +9,6 @@ class DynamicRune:
 
         for attribute in selenium_rune.get_property('attributes'):
             self.attributes[attribute['nodeName']] = attribute['nodeValue']
-        ibrk = 0
 
 
     def __repr__(self):
@@ -22,6 +21,12 @@ class DynamicRune:
         if item_request in self.attributes:
             return self.attributes[item_request]
         return None
+
+    def __contains__(self, item_request):
+        if item_request in self.attributes:
+            return True
+        elif item_request not in self.attributes:
+            return False
 
     def select(self, css_selector):
         return DynamicRune(self.selenium_rune.find_element_by_css_selector(css_selector), self.driver)

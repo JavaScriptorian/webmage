@@ -4,13 +4,11 @@ import requests
 import time
 from bs4 import BeautifulSoup as BS 
 
-
 from .static import StaticSpell
 from .dynamic import DynamicSpell
 
 class WebSpell:
     # Initializes a StaticSpell (requests) or DynamicSpell (selenium)
-    # def __init__(self, url, driverPath=None, encoding='utf-8'):
     def __init__(self, url, method='static', **kwargs):
         self.url = url
         self.method = method
@@ -30,9 +28,3 @@ class WebSpell:
             return DynamicSpell(url=self.url, driver_path=driver_path, ghost=ghost)
 
 
-
-# spell = WebSpell('https://wordcruncher.com', method='dynamic').cast()
-# spell.change_url('https://wordcruncher.com/docs')
-
-# for tmp in spell.selectAll('p'):
-#     print(tmp)
