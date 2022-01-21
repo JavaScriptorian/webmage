@@ -37,8 +37,9 @@ class StaticSpell:
 
     # Gets the end name of the URL
     def get_slug(self):
+        slug = re.sub(r'/$', r'', self.url)
         # Get portion of URL after last forward slash.
-        slug =  re.sub(r'^.+?/([^/]+?)$', r'\1', self.url)
+        slug =  re.sub(r'^.+?/([^/]+?)$', r'\1', slug)
         # Remove any hashes
         slug = re.sub(r'#[^#]+?$', r'', slug)
         # Remove any queries

@@ -4,6 +4,7 @@ import requests
 import time
 from bs4 import BeautifulSoup as BS 
 
+
 from .static import StaticSpell
 from .dynamic import DynamicSpell
 

@@ -225,7 +225,7 @@ class DynamicSpell:
         return self.driver.execute_script(javaScript)
 
 
-    def cast_in_discrete_tab(self, url, callback=False, payload):
+    def cast_in_discrete_tab(self, url, callback=False, payload=None):
         # Open a new tab to the url
         self.cast_js(f"window.open('{url}', '_blank');")
         # Get list of all tabs (handles)
@@ -247,3 +247,16 @@ class DynamicSpell:
 
     def take_screenshot(self, css_selector):
         return self.driver.find_element_by_css_selector(css_selector).screenshot_as_png
+
+    def clear(self, css_selector):
+        self.driver.find_element_by_css_selector(css_selector).clear()
+
+    def type(self, css_selector, string):
+        self.driver.find_element_by_css_selector(css_selector).send_keys(string)
+
+    def switch_frames(self, css_selector):
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame(self.driver.find_element_by_css_selector(css_selector))
+
+    def get_page_source(self):
+        return self.driver.page_source
